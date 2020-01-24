@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Principal -->
+        <ui:composition template="./templates/masterTemplate.xhtml">
+
+            <ui:define name="content" >
+                <div id="tooplate_main" >
+                    <div class="contenedorUsuario">
+                        <h:form id="frmUsuario" rendered="#{loginFormBean.verificarSesion()}">
+                            <h:form id="frmDocente" rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+                                <div class="row">
+                                    <div align="left" class="column">
+
+                                        <p:panel header="#{msg['menu.infdocente']}" >
+                                            <h:panelGrid columns="2">
+                                                <p:outputLabel for="txtApellido" value="#{msg['menu.apellido']}" />
+                                                <p:inputText id="txtApellido" value="#{docenteFormBean.docenteSesion.perfil.apellido}" 
+                                                             readonly="true" />
+
+                                                <p:outputLabel for="txtNombre" value="#{msg['menu.nombre']}" />
+                                                <p:inputText id="txtNombre" value="#{docenteFormBean.docenteSesion.perfil.nombre}" readonly="true" />
+
+                                                <p:outputLabel for="txtCargo" value="#{msg['menu.cargo']} "/>
+                                                <p:inputText id="txtCargo" value="#{docenteFormBean.docenteSesion.cargo}" readonly="true"/>
+
+                                                <p:outputLabel for="txtLegajo" value="#{msg['menu.legajo']}"/>
+                                                <p:inputText id="txtLegajo" value="#{docenteFormBean.docenteSesion.legajo}" readonly="true"/>
+                                            </h:panelGrid>
+                                        </p:panel>
+                                        
+                                    </div>
+                                    
+                                    <div align="left" class="column">
+                                        
+                                        <p:dataList value="#{docenteFormBean.obtenerMateriaDocente()}" var="mat" type="unordered" emptyMessage="No se le asigno ninguna materia">
+                                            <f:facet name="header" >
+                                                Materias que dicto
+                                            </f:facet>
+                                                #{mat.materia.nombre}
+                                            <!--#/{}, #/{}--> 
+                                        </p:dataList>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                
+                            </h:form>
+                            
+                            <h:form id="frmSupervisor" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                                <div class="row">
+                                    <div align="left" class="column">
+
+                                        <p:panel header="#{msg['menu.infsupervisor']}" >
+                                            <h:panelGrid columns="2">
+                                                <p:outputLabel for="txtApellido" value="Apellido: " />
+                                                <p:inputText id="txtApellido" value="#{perfilFormBean.supervisorSesion.apellido}" 
+                                                             readonly="true" />
+
+                                                <p:outputLabel for="txtNombre" value="Nombre: " />
+                                                <p:inputText id="txtNombre" value="#{perfilFormBean.supervisorSesion.nombre}" readonly="true" />
+
+                                                <p:outputLabel for="txtDni" value="DNI: "/>
+                                                <p:inputText id="txtDni" value="#{perfilFormBean.supervisorSesion.dni}" readonly="true"/>
+                                         
+                                            </h:panelGrid>
+                                        </p:panel>
+                                        
+                                    </div>
+                                    
+                                    
+                                </div>
+                                
+                            </h:form>
+                            
+                            <h:form id="frmAlumno" rendered="#{loginFormBean.verificarTipoUsuario() eq 3}">
+                                <div class="row">
+                                    <div align="left" class="column">
+
+                                        <p:panel header="Información del alumno" >
+                                            <h:panelGrid columns="2">
+                                                <p:outputLabel for="txtApellido" value="#{msg['menu.apellido']}" />
+                                                <p:inputText id="txtApellido" value="#{alumnoFormBean.alumnoSesion.perfil.apellido}" readonly="true" />
+
+                                                <p:outputLabel for="txtNombre" value="#{msg['menu.nombre']}" />
+                                                <p:inputText id="txtNombre" value="#{alumnoFormBean.alumnoSesion.perfil.nombre}" readonly="true" />
+
+                                                <p:outputLabel for="txtLu" value="#{msg['menu.lu']}"/>
+                                                <p:inputText id="txtLu" value="#{alumnoFormBean.alumnoSesion.libretaUniversitaria}" readonly="true"/>
+
+                                                <p:outputLabel for="txtCarrera" value="#{msg['menu.carrera']}"/>
+                                                <p:inputText id="txtCarrera" value="#{alumnoFormBean.alumnoSesion.carrera.nombre}" 
+                                                             readonly="true" size="40"/>
+                                            </h:panelGrid>
+                                        </p:panel>
+                                        
+                                    </div>
+                                    
+                                    <div align="left" class="column">
+                                        
+                                        <p:dataList value="#{alumnoFormBean.obtenerMateriasAlumno()}" var="matAlu" type="unordered" emptyMessage="No se inscribio a ninguna materia">
+                                            <f:facet name="header" >
+                                                Materias que curso
+                                            </f:facet>
+                                                #{matAlu.docenteMateria.materia.nombre}
+                                        </p:dataList>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </h:form>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

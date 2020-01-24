@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Ver Asistencias (Docente) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        
+                        <p:panel rendered="#{loginFormBean.verificarSesion()}">
+                            <h:form id="frmListaAsistencia" rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+                                <h2>Ver Asistencias</h2>
+                                <p:separator />
+                                <br />
+                                <p:growl id="grwTomarAsistencia" />
+                                <h:panelGrid cellpadding="7" columns="1">                                    
+                                    
+                                    <p:outputLabel value="#{msg['abm.materia']}" for="mnuMateria" />
+                                    <p:selectOneMenu id="mnuMateria" value="#{asistenciaFormBean.docenteMateria}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true" >
+                                        <f:selectItems value="#{docenteFormBean.obtenerMateriaDocente()}" var="doc"
+                                                       itemLabel="#{doc.materia.nombre}" itemValue="#{doc}" />
+                                    </p:selectOneMenu>
+                                    
+                                    <p:commandButton value="Actualizar Lista" update="tblAsistencia" 
+                                                     actionListener="#{asistenciaFormBean.obtenerAsistenciaAlumnosPorDocenteMateria()}" />
+
+                                    <p:dataTable id="tblAsistencia" var="alu" value="#{asistenciaFormBean.asistenciaMaterias}"
+                                             emptyMessage="Seleccione una carrera para mostrar">
+                                        <p:column headerText="Id">
+                                            <p:outputLabel value="#{alu.codigo}" />
+                                        </p:column>                   
+                                        
+                                        <p:column headerText="Fecha" groupRow="true" filterBy="#{alu.fecha}">
+                                            <p:outputLabel value="#{alu.fecha}" />
+                                        </p:column>
+                                        <p:column headerText="LU Alumno">
+                                            <p:outputLabel value="#{alu.inscripcionAlumno.alumno.libretaUniversitaria}" />
+                                        </p:column>
+                                        <p:column headerText="Aula">
+                                            <p:outputLabel value="#{alu.aulaMateria.aula.nombre}"/>
+                                        </p:column>
+                                        <p:column headerText="Dia">
+                                            <p:outputLabel value="#{alu.aulaMateria.dia}"/>
+                                        </p:column>
+                                        <p:column headerText="Asistencia" >
+                                            <p:outputLabel value="#{alu.valor}"/>
+                                        </p:column>                                    
+                                        
+                                    </p:dataTable>
+
+                                </h:panelGrid>
+                            </h:form>
+                        </p:panel>
+                        
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

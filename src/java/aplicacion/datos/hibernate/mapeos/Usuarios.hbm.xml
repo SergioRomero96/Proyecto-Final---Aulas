@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-jun-2018 9:55:56 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="aulas" name="aplicacion.modelo.dominio.Usuario" optimistic-lock="version" table="usuarios">
+    <id name="codigo" type="java.lang.Integer">
+      <column name="usu_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <property name="nombreUsuario" type="string">
+      <column length="10" name="usu_nombre_usuario" not-null="true"/>
+    </property>
+    <property name="password" type="string">
+      <column name="usu_password" not-null="true"/>
+    </property>
+    <property name="tipoUsuario" type="string">
+      <column length="15" name="usu_tipo_usuario" not-null="true"/>
+    </property>
+    <property name="estado" type="boolean">
+      <column name="usu_estado" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

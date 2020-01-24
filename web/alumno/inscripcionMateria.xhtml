@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista inscripción a materia (Alumno) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main" >
+                    <p:panel id="pnlListaMaterias" rendered="#{loginFormBean.verificarSesion()}">
+                        <h2> #{msg['alu.inscMat']} </h2>
+                        <p:separator />
+                        <br />
+
+                        <h:form id="frmListaMaterias" >
+                            <p:growl id="mensaje" />
+                            <p:dataTable id="tblMaterias" emptyMessage="#{msg['alu.listaMateria']}"
+                                         value="#{inscripcionAlumnoFormBean.obtenerMateriasDocente()}" var="ins" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15">
+                                <p:column headerText="#{msg['abm.materia']}">
+                                    <p:outputLabel  value="#{ins.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.docente']}">
+                                    <p:outputLabel value="#{ins.docente.perfil.apellido} #{ins.docente.perfil.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['alu.inscribirse']}" width="60">
+                                    <p:commandButton icon="ui-icon-plus" actionListener="#{inscripcionAlumnoFormBean.inscribirMateriaAlumno(ins)}"
+                                                     update="frmListaMaterias">
+                                        <p:confirm header="#{msg['abm.confirmar']}" message="#{msg['alu.inscripcionConf']}" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                                
+                            </p:dataTable>
+
+                        </h:form>
+                        <h:form id="frmConfirmacion">
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="#{msg['alu.si']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="#{msg['alu.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </h:form>
+                    </p:panel>
+
+
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

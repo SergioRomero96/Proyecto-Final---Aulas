@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Modificar Aula (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        <p:panel rendered="#{loginFormBean.verificarSesion()}">
+
+                            <h2> #{msg['mt.verAula']} </h2>
+                            <p:separator />                            
+                            <p:button outcome="/supervisor/altaAula" value="#{msg['abm.cargarAula']}" icon="ui-icon-disk" />
+                            <p:separator />
+                            
+                        
+                            <h:form id="frmListaAulas" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}" >
+                                
+                                <p:dataTable id="tblAulas" var="au" value="#{aulaFormBean.obtenerAulas()}" 
+                                             emptyMessage="#{msg['abm.listaAulas']}" rows="10" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                             rowsPerPageTemplate="5, 10, 15" reflow="true">     
+                                    <f:facet name="header">
+                                        <p:outputLabel  value="#{msg['abm.listNomAula']}" style="font-size: large"/>
+                                    </f:facet>
+                                    <p:column headerText="id">
+                                        <p:outputLabel value="#{au.codigo}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.nombre']}" filterBy="#{au.nombre}">
+                                        <p:outputLabel value="#{au.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['abm.descripcion']}">
+                                        <p:outputLabel value="#{au.descripcion}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['abm.capacidad']}">
+                                        <p:outputLabel value="#{au.capacidad}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg['abm.editar']}" width="50">
+                                        <p:commandButton id="btnEditar" icon="ui-icon-pencil"
+                                                         oncomplete="PF('dialogEditarAula').show();"
+                                                         update="frmEditar">
+                                            <f:setPropertyActionListener target="#{aulaFormBean.aulaBean.aula}" value="#{au}" />     
+                                        </p:commandButton>
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg['abm.eliminar']}" width="65">
+                                        <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminarAula').show();"
+                                                         update="frmEliminar" >
+                                            <f:setPropertyActionListener target="#{aulaFormBean.aulaBean.aula}" value="#{au}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                
+                                <p:separator />
+                                <p:panelGrid id="btnImprimir">
+                                    <p:commandButton id="btnImprimirAulas" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print"
+                                                     ajax="false" actionListener="#{aulaFormBean.exportarAulasPdf(actionEvent)}" />
+                                </p:panelGrid>
+                                <p:separator />
+                                
+                            </h:form>
+                                                                                    
+                            <h:form id="frmEditar">
+                                <p:growl id="mensajes" />
+                                <p:dialog id="dlgEditar" header="#{msg['abm.editarAula']}" widgetVar="dialogEditarAula" resizable="false" 
+                                          showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre" />
+                                        <p:inputText id="txtNombre" value="#{aulaFormBean.aulaBean.aula.nombre}" readonly="true" />
+                                        <p:outputLabel value="#{msg['abm.descripcion']}" for="txtDescripcion" />
+                                        <p:inputTextarea id="txtDescripcion" value="#{aulaFormBean.aulaBean.aula.descripcion}" required="true" >
+                                            <f:validateLength maximum="100" />
+                                        </p:inputTextarea>
+                                        <p:outputLabel value="#{msg['abm.capacidad']}" for="txtCapacidad"/>  
+                                        <p:inputNumber id="txtCapacidad" value="#{aulaFormBean.aulaBean.aula.capacidad}" required="true" 
+                                                       decimalPlaces="0" maxValue="500">
+                                            <f:validateDoubleRange minimum="1" />
+                                        </p:inputNumber>
+                                        <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{aulaFormBean.actualizarAula()}" update="mensajes frmListaAulas"
+                                                         oncomplete="PF('dialogEditarAula').hide();" icon="ui-icon-disk" style="margin: 20px"/>
+                                    </h:panelGrid>
+
+                                </p:dialog>
+                            </h:form>
+                            
+                            <h:form id="frmEliminar">
+                                <p:dialog id="dlgEliminar" header="#{msg['abm.eliminar']}" widgetVar="dialogEliminarAula" resizable="false" 
+                                           showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEliminar" columns="1" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.nombre']}: #{aulaFormBean.aulaBean.aula.nombre}" />
+                                        <p:outputLabel value="#{msg['abm.descripcion']}: #{aulaFormBean.aulaBean.aula.descripcion}"/>
+                                        <p:outputLabel value="#{msg['abm.capacidad']}: #{aulaFormBean.aulaBean.aula.capacidad}"/>
+                                    </h:panelGrid>
+                                    <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{aulaFormBean.eliminarAula()}" update="frmListaAulas"
+                                                     icon="ui-icon-check" style="margin: 20px"/>
+                                    <p:commandButton value="#{msg['usuario.cancelar']}" update="frmListaAulas"
+                                                     oncomplete="PF('dialogEliminarAula').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                                </p:dialog>
+                            </h:form>
+                            
+                        </p:panel>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

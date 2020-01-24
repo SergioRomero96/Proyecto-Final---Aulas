@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-jun-2018 9:55:56 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="aulas" name="aplicacion.modelo.dominio.AulaMateria" optimistic-lock="version" table="aulas_materias">
+    <id name="codigo" type="java.lang.Integer">
+      <column name="am_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="aplicacion.modelo.dominio.Aula" fetch="join" name="aula" cascade="all">
+      <column name="am_aula" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="aplicacion.modelo.dominio.DocenteMateria" fetch="join" name="docenteMateria" cascade="all">
+      <column name="am_asignacion_materia" not-null="true"/>
+    </many-to-one>
+    <property name="periodo" type="string">
+      <column length="45" name="am_periodo" not-null="true">
+        <comment>{ANUAL-CUATRIMESTRAL-PARCIAL ANUAL-PARCIAL CUATRIMESTRAL}</comment>
+      </column>
+    </property>
+    <property name="comentario" type="string">
+      <column length="100" name="am_comentario" not-null="true"/>
+    </property>
+    <property name="dia" type="string">
+      <column length="45" name="am_dia" not-null="true">
+        <comment>{LUNES-MARTES-MIERCOLES-JUEVES-VIERNES-SABADO}</comment>
+      </column>
+    </property>
+    <property name="horarioDesde" type="string">
+      <column length="10" name="am_horario_desde" not-null="true"/>
+    </property>
+    <property name="horarioHasta" type="string">
+      <column length="10" name="am_horario_hasta" not-null="true"/>
+    </property>
+    <property name="estado" type="boolean">
+      <column name="am_estado" not-null="true"/>
+    </property>
+    <property name="franjaHoraria" type="string">
+      <column length="45" name="am_franja_horaria" not-null="true">
+        <comment>{MAÑANA-MEDIA MAÑANA-MEDIA TARDE-TARDE-NOCHE}</comment>
+      </column>
+    </property>
+    <!--<set fetch="select" inverse="true" lazy="true" name="asistenciases" table="asistencias">
+      <key>
+        <column name="asi_aula_materia" not-null="true"/>
+      </key>
+      <one-to-many class="aplicacion.modelo.dominio.Asistencia"/>
+    </set>-->
+  </class>
+</hibernate-mapping>

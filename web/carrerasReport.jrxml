@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="carrerasReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7c77a33b-3aa2-4008-a459-3b05aa375273">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<field name="codigo" class="java.lang.Integer"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="plan" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="82" y="33" width="382" height="45" uuid="8c530567-a65b-4b96-9af9-2e3865f60589"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="36" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Carreras - Reporte]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="74" y="23" width="400" height="66" uuid="3c26ff13-40e7-47f5-9cb9-a0fb12890f1a"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="65" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="f9183720-0faf-4c5a-b8c4-d66f3f8d5254"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="1" y="45" width="61" height="20" uuid="46cc98ec-6c92-4b72-a51c-282e93836a79"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="45" width="344" height="20" uuid="b2350ab6-8d83-4f82-989e-46610a28e2c1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="433" y="45" width="100" height="20" uuid="987c79af-6b47-42f1-a5bc-7da99c34d9c8"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Plan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="2" y="20" width="553" height="24" uuid="971ab357-d250-4e22-98c2-a129cda34a58"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="14" isBold="true" isUnderline="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Listado de Carreras - Facultad de Ingeniería UNJu]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="44" width="555" height="1" uuid="a1a341e9-4eb6-45c2-81cd-ce209f5cca49"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="64" width="555" height="1" uuid="91d7cf95-d425-4049-946d-0c0bf456e85a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="1" y="0" width="555" height="36" uuid="8e71ee19-79bf-4587-bd39-bb3ee1a73e7c"/>
+				<textField>
+					<reportElement x="1" y="10" width="60" height="20" uuid="a351b110-0624-4c40-a46a-46b6729b94a2"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="81" y="10" width="344" height="20" uuid="43bd052c-f67b-48f7-8b66-204345263359"/>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="432" y="10" width="100" height="20" uuid="e45e1f08-734a-4a9e-b035-eddad6534a8f"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{plan}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="17" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-27" y="0" width="597" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="9beb8766-e048-4613-bcc6-f2c613577535"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="533" y="0" width="40" height="20" forecolor="#736343" uuid="e309cd9b-be42-4eb6-b3fd-af2bb8619d4b"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="453" y="0" width="80" height="20" forecolor="#736343" uuid="f11af373-5710-465d-a4e2-b60f068a18a7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="e50a090c-26d4-4a7f-aa65-f566cfbef6b7"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

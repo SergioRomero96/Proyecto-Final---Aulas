@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="materiasReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="45e4bad6-41d3-4b26-8690-51623b3d1f6a">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="251"/>
+	<property name="ireport.y" value="31"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<field name="codigo" class="java.lang.Integer"/>
+	<field name="carrera.nombre" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="105" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="67" y="30" width="652" height="45" uuid="5e7dc449-d1e2-4063-bd15-a86ba6e599b0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="36" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Materias - Reporte]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="169" y="15" width="444" height="74" uuid="0c1342af-9c01-4b23-a393-5912c7e1310e"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="67" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="7" width="800" height="1" uuid="fb05a685-523e-4eb8-b47e-55a441f7416c"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="40" width="55" height="20" uuid="14c983cc-2423-434f-9ff9-06e66512ad9e"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="SubTitle" x="1" y="16" width="801" height="24" uuid="4de82c52-e440-4f28-bade-de20f6a6c873"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="14" isBold="true" isUnderline="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Listado de Aulas - Facultad de Ingeniería UNJu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="432" y="40" width="350" height="20" uuid="2e8c1015-017f-4039-921a-27ecac9d20dd"/>
+				<text><![CDATA[Carrera]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="40" width="350" height="20" uuid="27891036-47c0-4a4e-8c88-4bbb4d21a5df"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="59" width="800" height="1" uuid="045def25-8d7c-45a9-b7d0-d12d2a84d70a"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="2" y="39" width="800" height="1" uuid="0b1cce34-1aab-4501-a0a0-79571b55395f"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="1" y="0" width="801" height="28" uuid="3e653038-8b9c-4edb-b381-485e44fff703"/>
+				<textField>
+					<reportElement x="431" y="0" width="350" height="20" uuid="429094a0-0703-469c-997e-84a22d86aca3"/>
+					<textFieldExpression><![CDATA[$F{carrera.nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="66" y="0" width="350" height="20" uuid="1b33ad0d-3cec-42ac-a4e3-c125713a8760"/>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="55" height="20" uuid="1167d115-dd04-42d7-8a84-5f4fcb351497"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="6768c79c-1e7c-489a-9d9a-55140170af0b"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="1" width="823" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="a75e0738-c9c7-4bf7-ab56-5c7c879aecf8"/>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="fb487640-9932-47f2-8244-64f0fc62302e"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="761" y="0" width="40" height="20" forecolor="#736343" uuid="b188ff2f-17cd-4fa9-aca5-8df46d7fbb5c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="Column header" x="681" y="0" width="80" height="20" forecolor="#736343" uuid="de36ce94-bde9-4af9-9100-93fdcea18376"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

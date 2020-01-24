@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Alta Materia (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        <h:form id="frmAltaMateria" rendered="#{loginFormBean.verificarSesion()}">
+                            <p:growl id="mensajeGeneral" />
+                            <p:panel header="#{msg['abm.cargarMateria']}" footer="APU 2018 - Facultad de Ingeniería UNJu"
+                                     rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                     
+                                    <p:outputLabel value="#{msg['abm.carrera']}" for="mnuCarrera" />
+                                    <p:selectOneMenu id="mnuCarrera" value="#{materiaFormBean.carreraBean.carrera}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true" >
+                                        <f:selectItems value="#{materiaFormBean.obtenerCarrera()}" var="car"
+                                                       itemLabel="#{car.nombre}" itemValue="#{car}" />
+                                    </p:selectOneMenu>
+                                    
+                                    <p:outputLabel for="txtMateria" value="#{msg['abm.materia']}" /> 
+                                    <p:inputText id="txtMateria" value="#{materiaFormBean.materiaBean.materia.nombre}"
+                                                 required="true" maxlength="100" />
+                                    
+                                </h:panelGrid>
+                                
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:commandButton id="btnAgregar" value="#{msg['abm.agregarMateria']}" icon="ui-icon-disk"
+                                                     update="mensajeGeneral" actionListener="#{materiaFormBean.agregarMateria()}" />
+                                    <p:button outcome="/supervisor/editarMateria" value="#{msg['mt.verMateria']}" icon="ui-icon-calculator" />
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Editar DocenteMateria (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+
+                    <p:panel  rendered="#{loginFormBean.verificarSesion()}" >
+                        
+                        <h:form id="frmLista" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                            
+                            <h2> #{msg['mt.verMatDoc']} </h2>
+                            <p:separator />                            
+                            <p:button outcome="/supervisor/asignarDocenteMateria" value="#{msg['abm.cargarDocMat']}" icon="ui-icon-disk" />
+                            <p:separator />
+                            
+                            <p:dataTable id="tblDocenteMateria" var="dm" value="#{docenteMateriaFormBean.obtenerMateriasAsignadas()}" 
+                                         emptyMessage="#{msg['abm.listaDocenteMateria']}" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15" reflow="true">
+                                <f:facet name="header">
+                                    <p:outputLabel  value="#{msg['abm.listNomDocenteMateria']}" style="font-size: large"/>
+                                </f:facet>
+                                <p:column headerText="id" width="50">
+                                    <p:outputLabel  value="#{dm.codigo}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.year']}" width="50">
+                                    <p:outputLabel  value="#{dm.anio}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.habilitado']}" width="80">
+                                    <p:selectBooleanCheckbox  value="#{dm.habilitado}" disabled="true"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}" filterBy="#{dm.materia.nombre}">
+                                    <p:outputLabel  value="#{dm.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.docente']}" filterBy="#{dm.docente.perfil.apellido} #{dm.docente.perfil.nombre}">
+                                    <p:outputLabel  value="#{dm.docente.perfil.apellido} #{dm.docente.perfil.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.editar']}" width="50" rendered="#{loginFormBean.desactivar}">
+                                    <p:commandButton id="btnEditar" icon="ui-icon-pencil" oncomplete="PF('dialogEditar').show();"
+                                                     update="frmEditar">
+                                        <f:setPropertyActionListener target="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria}" value="#{dm}" />
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.eliminar']}" width="65" rendered="#{loginFormBean.desactivar}">
+                                    <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminar').show();"
+                                                     update="frmEliminar">
+                                        <f:setPropertyActionListener target="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria}" value="#{dm}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            
+                            <br/>
+                            
+                            
+                            <p:separator />
+                            <p:panelGrid id="btnImprimir">
+                                <p:commandButton id="btnImprimirDocenteMateria" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print"
+                                                 ajax="false" actionListener="#{docenteMateriaFormBean.exportarDocenteMateriaPdf(actionEvent)}" />
+                            </p:panelGrid>
+                            
+                        </h:form>
+
+                        <h:form id="frmEditar">
+                            <p:growl id="mensajes" />
+                            <p:dialog id="dlgEditar" header="#{msg['abm.editarDocenteMateria']}" widgetVar="dialogEditar" resizable="false" 
+                                      showEffect="explode" hideEffect="explode" modal="true" >
+                                <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+                                    <p:outputLabel value="#{msg['abm.codigo']}" for="txtCodigo"/>
+                                    <p:inputText id="txtCodigo" value="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.codigo}" readonly="true"/>
+                                    <p:outputLabel value="#{msg['abm.carrera']}" for="txtCarrera"/>
+                                    <p:inputText id="txtCarrera" value="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.materia.carrera.nombre}" size="30" readonly="true"/>
+                             
+
+                                    <p:outputLabel value="#{msg['abm.materia']}" for="txtMateria"/>
+                                    <p:inputText id="txtMateria" value="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.materia.nombre}" size="30" readonly="true"/>
+
+                                    <p:outputLabel value="#{msg['abm.year']}" for="cmbAnio"/>
+                                    <p:selectOneMenu id="cmbAnio" value="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.anio}" required="true">
+                                        <f:selectItem itemLabel="1° Año" itemValue="1" />
+                                        <f:selectItem itemLabel="2° Año" itemValue="2" />
+                                        <f:selectItem itemLabel="3° Año" itemValue="3" />
+                                        <f:selectItem itemLabel="4° Año" itemValue="4" />
+                                        <f:selectItem itemLabel="5° Año" itemValue="5" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{msg['abm.docente']}" for="cmbDocente"/>
+                                    <p:selectOneMenu id="cmbDocente" value="#{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.docente}" 
+                                                     converter="omnifaces.SelectItemsConverter" required="true">
+                                        <f:selectItems value="#{docenteMateriaFormBean.docenteBean.obtenerDocentes()}" var="doc" 
+                                                       itemLabel="#{doc.perfil.apellido} #{doc.perfil.nombre}" itemValue="#{doc}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{docenteMateriaFormBean.modificarDocenteMateria()}" update="mensajes frmLista"
+                                                 icon="ui-icon-disk" style="margin: 20px"/>
+                                <p:commandButton value="#{msg['usuario.cancelar']}" update="frmLista"
+                                                 oncomplete="PF('dialogEditar').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                            </p:dialog>
+                        </h:form>
+                        <h:form id="frmEliminar">
+                            <p:growl id="mensajes" />
+                            <p:dialog  header="#{msg['abm.eliminar']}" widgetVar="dialogEliminar" resizable="false" 
+                                       showEffect="explode" hideEffect="explode" modal="true" >
+                                <h:panelGrid id="pnlEliminar" columns="1" cellpadding="5">
+                                    <p:outputLabel value="#{msg['abm.codigo']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.codigo}" />
+                                    <p:outputLabel value="#{msg['abm.year']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.anio}"/>
+                                    <p:outputLabel value="#{msg['abm.habilitado']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.habilitado}" />
+                                    <p:outputLabel value="#{msg['abm.estado']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.estado}"/>  
+                                    <p:outputLabel value="#{msg['abm.materia']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.materia.nombre}"/>
+                                    <p:outputLabel value="#{msg['abm.docente']}: #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.docente.perfil.apellido}
+                                                   #{docenteMateriaFormBean.docenteMateriaBean.docenteMateria.docente.perfil.nombre}"/>
+
+                                </h:panelGrid>
+                                <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{docenteMateriaFormBean.eliminarDocenteMateria()}" update="mensajes frmLista"
+                                                 icon="ui-icon-check" style="margin: 20px"/>
+                                <p:commandButton value="#{msg['usuario.cancelar']}" update="frmLista"
+                                                 oncomplete="PF('dialogEliminar').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                            </p:dialog>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

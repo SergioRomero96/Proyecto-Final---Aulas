@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Editar HorarioMateria (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+
+                    <p:panel rendered="#{loginFormBean.verificarSesion()}">
+
+                        <h2> #{msg['mt.verHorAsig']} </h2>
+                        <p:separator /> 
+                        <h:form>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:button outcome="/supervisor/altaHorarioMateria" value="#{msg['abm.cargarHorMat']}" icon="ui-icon-plus" />
+                                <p:commandButton id="btnImprimirAulaMateria" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print"
+                                                 ajax="false" actionListener="#{aulaMateriaFormBean.exportarAulaMateriaPdf(actionEvent)}" />
+                            </h:panelGrid>
+                        </h:form>
+                        <p:separator />
+                        <h:form id="frmLista" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                            <p:dataTable id="tblHorarioMateria" var="hm" value="#{aulaMateriaFormBean.obtenerAulaMateria()}"
+                                         emptyMessage="#{msg['abm.listaHorarioMateria']}" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15" reflow="true">
+                                <f:facet name="header">
+                                    <p:outputLabel  value="#{msg['abm.listNomHorarioMateria']}" style="font-size: large"/>
+                                </f:facet>
+                                <p:column headerText="Id" width="15">
+                                    <p:outputLabel value="#{hm.codigo}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.periodo']}" filterBy="#{hm.periodo}">
+                                    <p:outputLabel value="#{hm.periodo}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.comentario']}">
+                                    <p:outputLabel value="#{hm.comentario}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.dia']}" filterBy="#{hm.dia}">
+                                    <p:outputLabel value="#{hm.dia}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.de']}" width="35">
+                                    <p:outputLabel value="#{hm.horarioDesde}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.hasta']}" width="45">
+                                    <p:outputLabel value="#{hm.horarioHasta}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.docente']}" filterBy="#{hm.docenteMateria.docente.legajo}">
+                                    <p:outputLabel value="#{hm.docenteMateria.docente.legajo}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}" filterBy="#{hm.docenteMateria.materia.nombre}">
+                                    <p:outputLabel value="#{hm.docenteMateria.materia.nombre}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.aula']}" width="80" filterBy="#{hm.aula.nombre}">
+                                    <p:outputLabel value="#{hm.aula.nombre}" />
+                                </p:column>
+                                <p:column headerText="#{msg['abm.franjaHoraria']}" filterBy="#{hm.franjaHoraria}">
+                                    <p:outputLabel value="#{hm.franjaHoraria}" />
+                                </p:column>
+
+                                <p:column headerText="#{msg['abm.editar']}" width="50" rendered="#{loginFormBean.desactivar}">
+                                    <p:commandButton id="btnEditar" icon="ui-icon-pencil" oncomplete="PF('dialogEditar').show();" 
+                                                     update="frmEditar">
+                                        <f:setPropertyActionListener target="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria}" value="#{hm}" />            
+                                    </p:commandButton>
+                                </p:column>
+
+                                <p:column headerText="#{msg['abm.eliminar']}" width="65" rendered="#{loginFormBean.desactivar}">
+                                    <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminar').show();"
+                                                     update="frmEliminar">
+                                        <f:setPropertyActionListener target="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria}" value="#{hm}" />                
+                                    </p:commandButton>
+                                </p:column>
+
+                            </p:dataTable>     
+                        </h:form>
+
+                        <h:form id="frmEditar">
+                            <p:growl id="mensajes" />
+                            <p:dialog id="dlgEditar" header="#{msg['abm.editarHorarioMateria']}" widgetVar="dialogEditar"
+                                      resizable="false" showEffect="explode" hideEffect="explode" modal="true">
+                                <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+
+                                    <p:outputLabel value="#{msg['abm.materia']}" for="txtAsignacion" />
+                                    <p:inputText id="txtAsignacion" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.docenteMateria.docente.legajo}" readonly="true" />
+
+                                    <p:outputLabel for="mnuPeriodo" value="#{msg['abm.periodo']}" />
+                                    <p:selectOneMenu id="mnuPeriodo" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.periodo}" required="true">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                        <f:selectItem itemLabel="Anual" itemValue="Anual" />
+                                        <f:selectItem itemLabel="Cuatrimestral" itemValue="Cuatrimestral" />
+                                        <f:selectItem itemLabel="Parcial Anual" itemValue="Parcial Anual" />
+                                        <f:selectItem itemLabel="Parcial Cuatrimestral" itemValue="Parcial Cuatrimestral" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{msg['abm.comentario']}" for="txtComentario"/>
+                                    <p:inputTextarea  id="txtComentario" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.comentario}" required="true">
+                                        <f:validateLength maximum="100" />
+                                    </p:inputTextarea>
+
+                                    <p:outputLabel value="#{msg['abm.aula']}" for="cmbAula" />
+                                    <p:selectOneMenu id="cmbAula" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.aula}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                        <f:selectItems value="#{aulaMateriaFormBean.aulaBean.obtenerAulas()}" var="au"
+                                                       itemLabel="#{au.nombre}" itemValue="#{au}" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="mnuDia" value="#{msg['abm.dia']}" />
+                                    <p:selectOneMenu id="mnuDia" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.dia}" required="true">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                        <f:selectItem itemLabel="Lunes" itemValue="Lunes" />
+                                        <f:selectItem itemLabel="Martes" itemValue="Martes" />
+                                        <f:selectItem itemLabel="Miércoles" itemValue="Miércoles" />
+                                        <f:selectItem itemLabel="Jueves" itemValue="Jueves" />
+                                        <f:selectItem itemLabel="Viernes" itemValue="Viernes" />
+                                        <f:selectItem itemLabel="Sábado" itemValue="Sábado" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{msg['abm.de']}" for="txtDe" />
+                                    <p:inputText id="txtDe" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.horarioDesde}"
+                                                 required="true" maxlength="5" />
+
+                                    <p:outputLabel value="#{msg['abm.a']}" for="txtA" />
+                                    <p:inputText id="txtA" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.horarioHasta}"
+                                                 required="true" maxlength="5" />
+
+                                    <p:outputLabel for="mnuFranjaHoraria" value="#{msg['abm.franjaHoraria']}" />
+                                    <p:selectOneMenu id="mnuFranjaHoraria" value="#{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.franjaHoraria}" required="true">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                        <f:selectItem itemLabel="Mañana" itemValue="Mañana" />
+                                        <f:selectItem itemLabel="Media Mañana" itemValue="Media Mañana" />
+                                        <f:selectItem itemLabel="Media Tarde" itemValue="Media Tarde" />
+                                        <f:selectItem itemLabel="Tarde" itemValue="Tarde" />
+                                        <f:selectItem itemLabel="Noche" itemValue="Noche" />
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>
+
+                                <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{aulaMateriaFormBean.modificarAulaMateria()}" update="mensajes frmLista"
+                                                 icon="ui-icon-disk" style="margin: 20px"/>
+                            </p:dialog>
+                        </h:form>
+
+                        <h:form id="frmEliminar">
+                            <p:growl id="mensajes" />
+                            <p:dialog header="#{msg['abm.eliminar']}" widgetVar="dialogEliminar" resizable="false" 
+                                      showEffect="explode" hideEffect="explode" modal="true" >
+
+                                <h:panelGrid id="pnlEliminar" columns="1" cellpadding="5">
+                                    <p:outputLabel value="#{msg['menu.legajo']}: #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.docenteMateria.docente.legajo}" />
+                                    <p:outputLabel value="#{msg['abm.materia']}: #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.docenteMateria.materia.nombre}" />
+                                    <p:outputLabel value="#{msg['abm.periodo']}: #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.periodo}" />
+                                    <p:outputLabel value="#{msg['abm.dia']}: #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.dia}" />
+                                    <p:outputLabel value="#{msg['abm.de']}:   #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.horarioDesde}
+                                                   #{msg['abm.a']}   #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.horarioHasta}" />
+                                    <p:outputLabel value="#{msg['abm.franjaHoraria']}: #{aulaMateriaFormBean.aulaMateriaBean.aulaMateria.franjaHoraria}" />
+                                </h:panelGrid>  
+
+                                <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{aulaMateriaFormBean.eliminarAulaMateria()}" update="mensajes frmLista"
+                                                 icon="ui-icon-check" style="margin: 20px"/>
+
+                            </p:dialog>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

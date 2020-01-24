@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aulas?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">admin</property>
+<!--    <property name="hibernate.show_sql">true</property>-->
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Alumnos.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Materias.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Aulas.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/DocentesMaterias.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/InscripcionesAlumnos.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Carreras.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Asistencias.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Perfiles.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/AulasMaterias.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Usuarios.hbm.xml"/>
+    <mapping resource="aplicacion/datos/hibernate/mapeos/Docentes.hbm.xml"/>
+  </session-factory>
+</hibernate-configuration>

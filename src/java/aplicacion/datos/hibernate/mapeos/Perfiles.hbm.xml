@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-jun-2018 9:55:56 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="aulas" name="aplicacion.modelo.dominio.Perfil" optimistic-lock="version" table="perfiles">
+    <id name="codigo" type="java.lang.Integer">
+      <column name="per_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="aplicacion.modelo.dominio.Usuario" fetch="join" name="usuario" cascade="all">
+      <column name="usuario" not-null="true"/>
+    </many-to-one>
+    <property name="nombre" type="string">
+      <column length="45" name="per_nombres" not-null="true"/>
+    </property>
+    <property name="apellido" type="string">
+      <column length="45" name="per_apellidos" not-null="true"/>
+    </property>
+    <property name="dni" type="string">
+      <column length="8" name="per_dni" not-null="true"/>
+    </property>
+    <property name="fechaNacimiento" type="date">
+      <column length="10" name="per_fecha_nac" not-null="true"/>
+    </property>
+    <property name="email" type="string">
+      <column length="80" name="per_email" not-null="true"/>
+    </property>
+    <property name="celular" type="string">
+      <column length="15" name="per_celular" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

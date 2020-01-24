@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <p:panel  rendered="#{loginFormBean.verificarSesion()}" >
+
+                        <h2>Ver inscripciones de alumnos</h2>
+                        <p:separator/>
+                        <br/>
+                        <h:form id="frmListaInscripcionAlumno" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+
+                            <p:dataTable id="tblInscripcionAlumno" var="ia" value="#{inscripcionAlumnoFormBean.obtenerInscripcionAlumnos()}" 
+                                         emptyMessage="#{msg['abm.listaInscripcionMateria']}" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15" sortField="true" reflow="true">
+                                <p:column headerText="id" width="50">
+                                    <p:outputLabel  value="#{ia.codigo}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.year']}" width="50" >
+                                    <p:outputLabel value="#{ia.docenteMateria.anio}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}">
+                                    <p:outputLabel  value="#{ia.docenteMateria.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.carrera']}" groupRow="true">
+                                    <p:outputLabel  value="#{ia.docenteMateria.materia.carrera.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['menu.legajo']} Profesor" width="70">
+                                    <p:outputLabel  value="#{ia.docenteMateria.docente.legajo}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.alumno']}" width="l0">
+                                    <p:outputLabel  value="#{ia.alumno.perfil.apellido} #{ia.alumno.perfil.nombre}"/>
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:form>
+                        <h:form id="frmInscripcionAlumno" rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+                            <p:growl id="mensaje" />
+                            <p:dataTable id="tblInscripcionAlumno" var="ia" value="#{inscripcionAlumnoFormBean.obtenerInscripcionAlumnosPorDocente()}" 
+                                         emptyMessage="#{msg['abm.listaAlumnos']}" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15" sortField="true">
+                                <p:column headerText="id" width="50">
+                                    <p:outputLabel  value="#{ia.codigo}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.year']}" width="50" groupRow="true">
+                                    <p:outputLabel value="#{ia.docenteMateria.anio}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}" filterBy="#{ia.docenteMateria.materia.nombre}">
+                                    <p:outputLabel  value="#{ia.docenteMateria.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="LU " filterBy="#{ia.alumno.libretaUniversitaria}">
+                                    <p:outputLabel  value="#{ia.alumno.libretaUniversitaria}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.alumno']}">
+                                    <p:outputLabel  value="#{ia.alumno.perfil.apellido} #{ia.alumno.perfil.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.eliminar']}" width="60">
+                                        <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminar').show();"
+                                                         update="frmEliminar">
+                                            <f:setPropertyActionListener target="#{inscripcionAlumnoFormBean.inscripcionAlumnoBean.inscripcionAlumno}" value="#{ia}" />
+                                        </p:commandButton>
+                                    </p:column>
+
+                            </p:dataTable>
+                        </h:form>
+                        <h:form id="frmEliminar">
+                            <p:dialog  header="#{msg['abm.bajaAlumno']}" widgetVar="dialogEliminar" resizable="false" 
+                                           showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEditar" columns="1" cellpadding="5">
+                                        <p:outputLabel value="Id: #{inscripcionAlumnoFormBean.inscripcionAlumnoBean.inscripcionAlumno.codigo}"/>
+                                        <p:outputLabel value="#{msg['abm.alumno']}: #{inscripcionAlumnoFormBean.inscripcionAlumnoBean.inscripcionAlumno.alumno.perfil.apellido} #{inscripcionAlumnoFormBean.inscripcionAlumnoBean.inscripcionAlumno.alumno.perfil.nombre}" />
+                                        <p:outputLabel value="#{msg['abm.materia']}: #{inscripcionAlumnoFormBean.inscripcionAlumnoBean.inscripcionAlumno.docenteMateria.materia.nombre}"/>
+                                    </h:panelGrid>
+                                <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{inscripcionAlumnoFormBean.borrarInscripcion()}" update="frmInscripcionAlumno"
+                                                     icon="ui-icon-check" style="margin: 20px"/>
+                                <p:commandButton value="#{msg['usuario.cancelar']}" update="frmInscripcionAlumno"
+                                                     oncomplete="PF('dialogEliminar').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                                </p:dialog>
+                            </h:form>
+                    </p:panel>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

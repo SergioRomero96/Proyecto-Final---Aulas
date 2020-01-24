@@ -5,10 +5,12 @@
  */
 package aplicacion.datos.hibernate.dao;
 
+import aplicacion.modelo.dominio.Usuario;
+
 /**
  *
  * @author Sergio Romero
  */
 public interface IUsuarioDAO {
-    
+    public Usuario validarUsuario(String nombreUsuario, String password);
 }

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        <h:form id="frmUsuario" rendered="#{loginFormBean.verificarSesion()}" >
+                            <p:growl id="mensaje" />
+                            <h:form id="frmDocente" rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+                                
+                                <p:panel header="#{msg['menu.infdocente']}" >
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.legajo']}"/>
+                                        <p:inputText value="#{docenteFormBean.docenteSesion.legajo}" readonly="true"/>
+                                        <p:outputLabel value="#{msg['menu.cargo']}"/>
+                                        <p:inputText value="#{docenteFormBean.docenteSesion.cargo}" readonly="true"/>
+                                    </h:panelGrid>
+
+                                </p:panel>
+                                <p:panel header="#{msg['menu.actDatos']}" >
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['usuario.usuario']}" for="txtNombre"/>
+                                        <p:inputText id="txtNombre" readonly="true" value="#{loginFormBean.nombreUsuarioValidado}"/>
+                                        <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido"/>
+                                        <p:inputText id="txtApellido" required="true" value="#{docenteFormBean.docenteBean.docente.perfil.apellido}" />
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombres"/>
+                                        <p:inputText id="txtNombres" required="true" value="#{docenteFormBean.docenteBean.docente.perfil.nombre}" />
+                                        <p:outputLabel value="#{msg['abm.dni']}" for="txtDNI"/>
+                                        <p:inputText id="txtDNI" required="true" value="#{docenteFormBean.docenteBean.docente.perfil.dni}" maxlength="8"/>
+                                        <p:outputLabel value="#{msg['abm.fechaNac']}" for="txtFechaNacimiento"/>
+                                        <p:calendar id="txtFechaNacimiento" pattern="dd-MM-yyyy" mask="true" required="true" size="10" maxlength="10"
+                                                    value="#{docenteFormBean.docenteBean.docente.perfil.fechaNacimiento}" />
+                                        <p:outputLabel value="#{msg['abm.correo']}" for="txtCorreoElectronico"/>
+                                        <p:inputText id="txtCorreoElectronico" required="true"  value="#{docenteFormBean.docenteBean.docente.perfil.email}" size="30">
+                                            <f:validator validatorId="emailValidator"/>
+                                        </p:inputText> 
+                                        <p:outputLabel/><p:outputLabel/>
+                                        <p:commandButton  id="btnModificar" value="#{msg['abm.actualizar']}" actionListener="#{docenteFormBean.actualizarPerfil()}" 
+                                                          update="frmUsuario" />
+                                        <p:button id="btnCancelar" value="Cancelar" outcome="menu"/>
+                                    </h:panelGrid>
+                                </p:panel> 
+                            </h:form>
+
+
+                            <h:form id="frmAlumno" rendered="#{loginFormBean.verificarTipoUsuario() eq 3}">
+                                
+                                <p:panel header="#{msg['menu.infalumno']}" >
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.lu']}"/>
+                                        <p:inputText value="#{alumnoFormBean.alumnoSesion.libretaUniversitaria}" readonly="true"/>
+                                        <p:outputLabel value="#{msg['abm.carrera']}"/>
+                                        <p:inputText value="#{alumnoFormBean.alumnoSesion.carrera.nombre}" readonly="true" size="40"/>
+                                    </h:panelGrid>
+                                </p:panel>
+                                <br/>
+                                <p:panel header="#{msg['menu.actDatos']}" >
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['usuario.usuario']}" for="txtNombre"/>
+                                        <p:inputText id="txtNombre" readonly="true" value="#{loginFormBean.nombreUsuarioValidado}"/>
+                                        <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido"/>
+                                        <p:inputText id="txtApellido" required="true" value="#{alumnoFormBean.alumnoBean.alumno.perfil.apellido}" />
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombres"/>
+                                        <p:inputText id="txtNombres" required="true" value="#{alumnoFormBean.alumnoBean.alumno.perfil.nombre}" />
+                                        <p:outputLabel value="#{msg['abm.dni']}" for="txtDNI"/>
+                                        <p:inputText id="txtDNI" required="true" value="#{alumnoFormBean.alumnoBean.alumno.perfil.dni}" maxlength="8"/>
+                                        <p:outputLabel value="#{msg['abm.fechaNac']}" for="txtFechaNacimiento"/>
+                                        <p:calendar id="txtFechaNacimiento" pattern="dd-MM-yyyy" mask="true" required="true" size="10" maxlength="10"
+                                                    value="#{alumnoFormBean.alumnoBean.alumno.perfil.fechaNacimiento}" />
+                                        <p:outputLabel value="#{msg['abm.correo']}" for="txtCorreoElectronico"/>
+                                        <p:inputText id="txtCorreoElectronico" required="true"  value="#{alumnoFormBean.alumnoBean.alumno.perfil.email}" size="30">
+                                            <f:validator validatorId="emailValidator"/>
+                                        </p:inputText> 
+                                        <p:outputLabel/><p:outputLabel/>
+                                        <p:commandButton  id="btnModificar" value="#{msg['abm.actualizar']}" actionListener="#{alumnoFormBean.actualizarPerfil()}" 
+                                                          update="frmUsuario" />
+                                        <p:button id="btnCancelar" value="#{msg['usuario.cancelar']}" outcome="menu"/>
+                                    </h:panelGrid>
+                                </p:panel>        
+                            </h:form>    
+                            
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

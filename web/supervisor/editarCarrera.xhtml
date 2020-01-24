@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Modificar Carrera (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                                                
+                        <p:panel rendered="#{loginFormBean.verificarSesion()}">
+                            
+                            <h2> #{msg['mt.verCarrera']} </h2>
+                            <p:separator />                            
+                            <p:button outcome="/supervisor/altaCarrera" value="#{msg['abm.cargarCarrera']}" icon="ui-icon-disk" />
+                            <p:separator />
+                            
+                            <h:form id="frmListaCarreras" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}" >
+                                
+                                <p:dataTable id="tblCarreras" var="car" value="#{carreraFormBean.obtenerCarreras()}" 
+                                             emptyMessage="#{msg['abm.listaCarreras']}" rows="10" paginator="true" 
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                             rowsPerPageTemplate="5, 10, 15" reflow="true">
+                                    <f:facet name="header">
+                                        <p:outputLabel  value="#{msg['abm.listNomCarrera']}" style="font-size: large"/>
+                                    </f:facet>
+                                    <p:column headerText="id">
+                                        <p:outputLabel value="#{car.codigo}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.nombre']}" filterBy="#{car.nombre}">
+                                        <p:outputLabel value="#{car.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['abm.plan']}" filterBy="#{car.plan}">
+                                        <p:outputLabel value="#{car.plan}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg['abm.editar']}" width="50" rendered="#{loginFormBean.desactivar}">
+                                        <p:commandButton id="btnEditar" icon="ui-icon-pencil"
+                                                         oncomplete="PF('dialogEditarCarrera').show();"
+                                                         update="frmEditar">
+                                            <f:setPropertyActionListener target="#{carreraFormBean.carreraBean.carrera}" value="#{car}" />     
+                                        </p:commandButton>
+                                    </p:column>
+                                    
+                                    <p:column headerText="#{msg['abm.eliminar']}" width="65" rendered="#{loginFormBean.desactivar}">
+                                        <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminarCarrera').show();"
+                                                         update="frmEliminar">
+                                            <f:setPropertyActionListener target="#{carreraFormBean.carreraBean.carrera}" value="#{car}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                
+                                <br/>
+                                
+                                
+                                <p:separator />
+                                <p:panelGrid id="btnImprimir">
+                                    <p:commandButton id="btnImprimirCarreras" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print"
+                                                     ajax="false" actionListener="#{carreraFormBean.exportarCarrerasPdf(actionEvent)}" />
+                                </p:panelGrid>
+                                
+                                
+                                
+                            </h:form>
+                            
+                            <h:form id="frmEditar">
+                                <p:growl id="mensajes" />
+                                <p:dialog id="dlgEditar" header="#{msg['abm.editarCarrera']}" widgetVar="dialogEditarCarrera" resizable="false" 
+                                          showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre" />
+                                        <p:inputText id="txtNombre" value="#{carreraFormBean.carreraBean.carrera.nombre}" required="true" />
+                                        <p:outputLabel value="#{msg['abm.plan']}" for="txtPlan"/>
+                                        <p:inputText id="txtPlan" value="#{carreraFormBean.carreraBean.carrera.plan}" required="true"/>               
+                                        <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{carreraFormBean.actualizarCarrera()}" update="mensajes frmListaCarreras"
+                                                         oncomplete="PF('dialogEditarCarrera').hide();" icon="ui-icon-disk" style="margin: 20px"/>
+                                    </h:panelGrid>
+                                </p:dialog>
+                            </h:form>
+                            
+                            <h:form id="frmEliminar">
+                                <p:dialog id="dlgEliminar" header="#{msg['abm.eliminar']}" widgetVar="dialogEliminarCarrera" resizable="false" 
+                                           showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEliminar" columns="1" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.nombre']}: #{carreraFormBean.carreraBean.carrera.nombre}" />
+                                        <p:outputLabel value="#{msg['abm.plan']}: #{carreraFormBean.carreraBean.carrera.plan}"/>
+                                    </h:panelGrid>
+                                    <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{carreraFormBean.eliminarCarrera()}" update="frmListaCarreras"
+                                                     icon="ui-icon-check" style="margin: 20px"/>
+                                    <p:commandButton value="#{msg['usuario.cancelar']}" update="frmListaCarreras"
+                                                     oncomplete="PF('dialogEliminarCarrera').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                                </p:dialog>
+                            </h:form>
+                            
+                        </p:panel>
+                        
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

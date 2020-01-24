@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Tomar Asistencia (Docente) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <h:form id="frmTomarAsistencia" rendered="#{loginFormBean.verificarSesion()}">
+                        <p:panel header="Tomar Asistencia" rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+
+                            <p:growl id="grwTomarAsistencia" />
+                            <h:panelGrid cellpadding="7" columns="1">
+
+                                <p:outputLabel value="#{msg['abm.materia']}" for="mnuMateria" />
+                                <h:panelGrid columns="3" cellpadding="5">
+                                    <p:selectOneMenu id="mnuMateria" value="#{asistenciaFormBean.docenteMateria}"
+                                                     converter="omnifaces.SelectItemsConverter" required="true" >
+                                        <f:selectItems value="#{docenteFormBean.obtenerMateriaDocente()}" var="doc"
+                                                       itemLabel="#{doc.materia.nombre}" itemValue="#{doc}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton id="btnBuscar" value="Buscar Aula" actionListener="#{asistenciaFormBean.obtenerAulaMateriaPorDocenteMateria()}"
+                                                     icon="ui-icon-search" update="frmTomarAsistencia" />
+
+                                    <p:selectOneMenu id="mnuAulaMateria" value="#{asistenciaFormBean.asistenciaBean.asistencia.aulaMateria}"
+                                                     converter="omnifaces.SelectItemsConverter"  >
+                                        <f:selectItems value="#{asistenciaFormBean.aulaMaterias}" var="am"
+                                                       itemLabel="#{am.aula.nombre} / #{am.dia} / #{am.horarioDesde} - #{am.horarioHasta}" itemValue="#{am}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+
+
+                                <p:outputLabel value="#{msg['abm.dia']}" for="txtFecha" />
+                                <p:calendar id="txtFecha" pattern="dd-MM-yyyy" mask="true"
+                                            required="true" value="#{asistenciaFormBean.asistenciaBean.asistencia.fecha}" />
+
+                                <p:commandButton value="#{msg['prof.updateList']}" update="frmTomarAsistencia" icon="ui-icon-refresh"
+                                                 actionListener="#{asistenciaFormBean.obtenerAlumnosPorMateria()}" />
+
+
+
+                                <p:dataTable id="tblAlumnos" var="alu" value="#{asistenciaFormBean.inscripcionAlumnos}"
+                                             emptyMessage="#{msg['prof.listEmptyMaterias']}">
+                                    <p:column headerText="Id">
+                                        <p:outputLabel value="#{alu.codigo}" />
+                                    </p:column>       
+                                    <p:column headerText="LU">
+                                        <p:outputLabel value="#{alu.alumno.libretaUniversitaria}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.apellido']}">
+                                        <p:outputLabel value="#{alu.alumno.perfil.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.nombre']}">
+                                        <p:outputLabel value="#{alu.alumno.perfil.nombre}" />
+                                    </p:column>                               
+                                    <p:column headerText="#{msg['prof.registrar']}">
+                                        <p:commandButton id="btnTomar" icon="ui-icon-calendar" oncomplete="PF('dialogTomarAsistencia').show();"
+                                                         update="frmTomar">
+                                            <f:setPropertyActionListener target="#{asistenciaFormBean.asistenciaBean.asistencia.inscripcionAlumno}" value="#{alu}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+
+                        </p:panel>
+                    </h:form>
+
+                    <h:form id="frmTomar">
+                        <p:growl id="mensajes" />
+                        <p:dialog id="dlgTomar" header="Registrar Asistencia" widgetVar="dialogTomarAsistencia" resizable="false" 
+                                  showEffect="explode" hideEffect="explode" modal="true" >
+                            <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+
+                                <p:outputLabel value="Liberta Universitaria" />
+                                <p:outputLabel value="#{asistenciaBean.asistencia.inscripcionAlumno.alumno.libretaUniversitaria}" />
+
+                                <p:outputLabel value="Apellido" />
+                                <p:outputLabel value="#{asistenciaBean.asistencia.inscripcionAlumno.alumno.perfil.apellido}" />
+
+                                <p:outputLabel value="Nombre" />
+                                <p:outputLabel value="#{asistenciaBean.asistencia.inscripcionAlumno.alumno.perfil.nombre}" />
+
+                                <p:outputLabel />
+                                <p:selectOneMenu id="mnuPeriodo" value="#{asistenciaFormBean.asistenciaBean.asistencia.valor}" required="true" >
+                                    <f:selectItem itemLabel="Ausente" itemValue="Ausente" />
+                                    <f:selectItem itemLabel="Presente" itemValue="Presente" />
+                                    <f:selectItem itemLabel="Tardanza" itemValue="Tardanza" />
+                                </p:selectOneMenu>
+
+                            </h:panelGrid>
+                            <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{asistenciaFormBean.registrarAsistencia2()}" update="mensajes frmTomarAsistencia:tblAlumnos"
+                                             icon="ui-icon-disk" style="margin: 20px" oncomplete="PF('dialogTomarAsistencia').hide();"/>
+                        </p:dialog>
+                    </h:form>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

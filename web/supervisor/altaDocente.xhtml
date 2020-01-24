@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Alta Profesor (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        <h:form id="frmAltaProfesor" rendered="#{loginFormBean.verificarSesion()}">
+                            <p:growl id="mensajeGeneral" />
+                            <h2> #{msg['abm.agregarDocente']} </h2>
+                            <p:separator />
+                            <br/>
+                            <p:accordionPanel multiple="false" activeIndex="0" >
+                                <p:tab title="#{msg['abm.academico']}">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.legajo']}" for="txtLegajo" />
+                                        <p:inputText id="txtLegajo" value="#{docenteFormBean.docenteBean.docente.legajo}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Z0-9 ]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:outputLabel value="#{msg['menu.cargo']}" for="txtCargo" />
+                                        <p:inputText id="txtCargo" value="#{docenteFormBean.docenteBean.docente.cargo}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab title="#{msg['abm.userpass']}">
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['usuario.usuario']}" for="txtUsuario" />
+                                        <p:inputText id="txtUsuario" value="#{docenteFormBean.perfilBean.perfil.usuario.nombreUsuario}" required="true">
+                                            <f:validateLength maximum="10" />
+                                            <p:keyFilter regEx="/[a-zA-Z0-9]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:outputLabel value="#{msg['usuario.password']}" for="txtPassword"/>
+                                        <p:password id="txtPassword" value="#{docenteFormBean.perfilBean.perfil.usuario.password}"
+                                                    required="true">
+                                            <f:validateLength maximum="255" />
+                                        </p:password>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab title="#{msg['abm.personal']}">
+                                    <h:panelGrid columns="2" cellpadding="5">
+
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre" />
+                                        <p:inputText id="txtNombre" value="#{docenteFormBean.perfilBean.perfil.nombre}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido" />
+                                        <p:inputText id="txtApellido" value="#{docenteFormBean.perfilBean.perfil.apellido}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{msg['abm.dni']}" for="txtDni" />
+                                        <p:inputText id="txtDni" value="#{docenteFormBean.perfilBean.perfil.dni}" maxlength="8" required="true" >
+                                            <p:keyFilter regEx="/[0-9]/i"/>
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{msg['abm.fechaNac']}" for="txtFechaNacimiento"/>
+                                        <p:calendar id="txtFechaNacimiento" pattern="dd-MM-yyyy" mask="true" size="10" maxlength="10"
+                                                    value="#{docenteFormBean.perfilBean.perfil.fechaNacimiento}" required="true"/>
+                                        
+                                        <p:outputLabel value="#{msg['abm.correo']}" for="txtCorreoElectronico"/>
+                                        <p:inputText id="txtCorreoElectronico" value="#{docenteFormBean.perfilBean.perfil.email}" required="true">
+                                            <f:validator validatorId="emailValidator"/>
+                                        </p:inputText>
+
+                                        <p:outputLabel value="#{msg['abm.celular']}" for="txtCelular"/>
+                                        <p:inputText id="txtCelular" value="#{docenteFormBean.perfilBean.perfil.celular}" maxlength="15" required="true">
+                                            <p:keyFilter regEx="/[0-9]/i"/>
+                                        </p:inputText>
+                                        
+                                    </h:panelGrid>
+                                </p:tab>
+                            </p:accordionPanel>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:commandButton id="btnRegistrar" value="#{msg['abm.agregarDocente']}" icon="ui-icon-disk" 
+                                                 actionListener="#{docenteFormBean.guardarDocente()}" update="frmAltaProfesor"/>
+                                <p:button outcome="/supervisor/editarDocente" value="#{msg['mt.verDocente']}" icon="ui-icon-calculator" />
+                            </h:panelGrid>
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

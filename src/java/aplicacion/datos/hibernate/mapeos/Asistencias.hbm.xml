@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 07-jun-2018 9:55:56 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class catalog="aulas" name="aplicacion.modelo.dominio.Asistencia" optimistic-lock="version" table="asistencias">
+    <id name="codigo" type="java.lang.Integer">
+      <column name="asi_codigo"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="aplicacion.modelo.dominio.AulaMateria" fetch="join" cascade="all" name="aulaMateria">
+      <column name="asi_aula_materia" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="aplicacion.modelo.dominio.InscripcionAlumno" fetch="join" cascade="all" name="inscripcionAlumno">
+      <column name="asi_alumno_inscripto" not-null="true"/>
+    </many-to-one>
+    <property name="fecha" type="date">
+      <column length="10" name="asi_fecha" not-null="true"/>
+    </property>
+    <property name="valor" type="string">
+      <column length="45" name="asi_valor" not-null="true">
+        <comment>{AUSENTE-PRESENTE-TARDANZA}</comment>
+      </column>
+    </property>
+    <property name="estado" type="boolean">
+      <column name="asi_estado" not-null="true"/>
+    </property>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Alta Usuario Final -->
+        <ui:composition template="./templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main" >
+                    <h:form id="frmNuevoUsuario" rendered="#{loginFormBean.verificarSesion() eq false}">
+                        <p:growl id="mensaje" />
+                        <h1>Registrarse como usuario</h1>
+                        <br/>
+                        <p:accordionPanel multiple="false" activeIndex="0" >
+                            <p:tab title="#{msg['abm.academico']}">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:outputLabel value="#{msg['menu.lu']}" for="txtLu"/>
+                                    <p:inputText id="txtLu" value="#{alumnoFormBean.alumnoBean.alumno.libretaUniversitaria}"
+                                                 maxlength="10" required="true"/>
+                                    <p:outputLabel value="#{msg['abm.carrera']}" for="cmbCarrera"/>
+                                    <p:selectOneMenu id="cmbCarrera" value="#{alumnoFormBean.carreraBean.carrera}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItems value="#{alumnoFormBean.obtenerCarreras()}" var="car" 
+                                                       itemLabel="#{car.nombre}" itemValue="#{car}"/>
+                                    </p:selectOneMenu>
+                                    
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{msg['abm.userpass']}">
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <p:outputLabel value="#{msg['usuario.usuario']}" for="txtNombreUsuario"/>
+                                    <p:inputText id="txtNombreUsuario" value="#{alumnoFormBean.perfilBean.perfil.usuario.nombreUsuario}"
+                                                 maxlength="10" required="true"/>
+                                    <p:outputLabel value="#{msg['usuario.password']}" for="txtContraseña"/>
+                                    <p:password id="txtContraseña" value="#{alumnoFormBean.perfilBean.perfil.usuario.password}"
+                                                 required="true"/>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{msg['usuario.mensaje']}">
+                                <h:panelGrid columns="2" cellpadding="5">
+
+                                    <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre"/>
+                                    <p:inputText id="txtNombre" value="#{alumnoFormBean.perfilBean.perfil.nombre}" 
+                                                 maxlength="45" required="true"/>
+                                    <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido"/>
+                                    <p:inputText id="txtApellido" value="#{alumnoFormBean.perfilBean.perfil.apellido}" 
+                                                 maxlength="45" required="true"/>
+
+                                    <p:outputLabel value="#{msg['abm.fechaNac']}" for="txtFechaNac"/>
+                                    <p:calendar id="txtFechaNac" pattern="dd-MM-yyyy" mask="true" maxlength="10" required="true" 
+                                                value="#{alumnoFormBean.perfilBean.perfil.fechaNacimiento}" showOn="button"/>
+                                    <p:outputLabel value="#{msg['abm.correo']}" for="txtEmail"/>
+                                    <p:inputText id="txtEmail" value="#{alumnoFormBean.perfilBean.perfil.email}" required="true">
+                                        <f:validator validatorId="emailValidator"/>
+                                    </p:inputText>
+                                    <p:outputLabel value="#{msg['abm.celular']}" for="txtCelular"/>
+                                    <p:inputText id="txtCelular" value="#{alumnoFormBean.perfilBean.perfil.celular}" 
+                                                  maxlength="15" required="true">
+                                        <p:keyFilter regEx="/[0-9]/i" />
+                                    </p:inputText>
+                                </h:panelGrid>
+                            </p:tab>
+                            <p:tab title="#{msg['abm.campo']}">
+                                <h:panelGrid  columns="2" cellpadding="5">
+                                    <p:outputLabel value="#{msg['abm.dni']}" for="txtDNI"/>
+                                    <p:inputText id="txtDNI" value="#{alumnoFormBean.perfilBean.perfil.dni}" 
+                                                   maxlength="8" required="true" />
+
+                                </h:panelGrid>
+                            </p:tab>
+
+                        </p:accordionPanel>
+                        <br/>
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:commandButton id="btnRegistrar" value="#{msg['usuario.crear']}" icon="ui-icon-disk" 
+                                             actionListener="#{alumnoFormBean.registrarAlumno()}" update="frmNuevoUsuario"/>
+                            <p:button value="#{msg['usuario.cancelar']}" outcome="index" icon="ui-icon-close"/>
+                        </h:panelGrid>
+                    </h:form>
+                    
+                    <h:form rendered="#{loginFormBean.verificarSesion() }">
+                        <p:panel>
+                            <p:outputLabel value="No puede crear una nueva cuenta porque actualmente estás logueado como #{loginFormBean.nombreUsuarioValidado}"/>
+                            <br/><br/>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:commandButton value="#{msg['usuario.salir']}" action="#{loginFormBean.cerrarSesion()}" icon="ui-icon-extlink"/>
+                                <p:button value="#{msg['usuario.cancelar']}" outcome="menu" icon="ui-icon-close"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        
+
+                    </h:form>
+                </div>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

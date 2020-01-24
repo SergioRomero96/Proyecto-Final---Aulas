@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Modificar Datos Docente (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+
+                        <p:panel  rendered="#{loginFormBean.verificarSesion()}" >
+                            <h2>Ver y Modificar Docentes</h2>
+                            <p:separator />                            
+                            <p:button outcome="/supervisor/altaDocente" value="#{msg['abm.cargarDocente']}" icon="ui-icon-disk" />
+                            
+                            <p:separator />
+                            
+                            <h:form id="frmListaDocentes" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                             
+                                <p:dataTable id="tblDocentes" var="doc" value="#{docenteFormBean.obtenerDocentes()}" 
+                                             emptyMessage="#{msg['abm.listaDocentes']}" rows="10" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                             rowsPerPageTemplate="5, 10, 15" reflow="true"> 
+                                    <f:facet name="header">
+                                        <p:outputLabel  value="#{msg['abm.listNomDocente']}" style="font-size: large"/>
+                                    </f:facet>
+                                    <p:column headerText="id">
+                                        <p:outputLabel  value="#{doc.codigo}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.legajo']}">
+                                        <p:outputLabel  value="#{doc.legajo}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.cargo']}" filterBy="#{doc.cargo}">
+                                        <p:outputLabel  value="#{doc.cargo}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.apellido']}" filterBy="#{doc.perfil.apellido}">
+                                        <p:outputLabel  value="#{doc.perfil.apellido}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg['menu.nombre']}" filterBy="#{doc.perfil.nombre}">
+                                        <p:outputLabel value="#{doc.perfil.nombre}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msg['usuario.usuario']}">
+                                        <p:outputLabel  value="#{doc.perfil.usuario.nombreUsuario}"/>
+                                    </p:column>
+
+                                    <p:column headerText="#{msg['abm.editar']}" width="50" rendered="#{loginFormBean.desactivar}">
+                                        <p:commandButton id="btnEditar" icon="ui-icon-pencil" oncomplete="PF('dialogEditarDocente').show();"
+                                                         update="frmEditar">
+                                            <f:setPropertyActionListener target="#{docenteFormBean.docenteBean.docente}" value="#{doc}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="#{msg['abm.eliminar']}" width="65" rendered="#{loginFormBean.desactivar}">
+                                        <p:commandButton id="btnEliminar" icon="ui-icon-trash" oncomplete="PF('dialogEliminarDocente').show();"
+                                                         update="frmEliminar">
+                                            <f:setPropertyActionListener target="#{docenteFormBean.docenteBean.docente}" value="#{doc}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <br/>
+                                
+                                
+                                <p:separator />
+                                <p:commandButton id="btnPrintDocente" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print" ajax="false"
+                                             actionListener="#{docenteFormBean.exportarDocentesPdf(actionEvent)}"/>
+
+                                
+                            </h:form>
+                           
+                            <h:form id="frmEditar">
+                                <p:growl id="mensajes" />
+                                <p:dialog id="dlgEditar" header="#{msg['abm.editarDocente']}" widgetVar="dialogEditarDocente" resizable="false" 
+                                          showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.legajo']}" for="txtLegajo" />
+                                        <p:inputText id="txtLegajo" value="#{docenteFormBean.docenteBean.docente.legajo}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Z0-9 ]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:outputLabel value="#{msg['menu.cargo']}" for="txtCargo" />
+                                        <p:inputText id="txtCargo" value="#{docenteFormBean.docenteBean.docente.cargo}"  required="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre" />
+                                        <p:inputText id="txtNombre" value="#{docenteFormBean.docenteBean.docente.perfil.nombre}"  required="true" readonly="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido" />
+                                        <p:inputText id="txtApellido" value="#{docenteFormBean.docenteBean.docente.perfil.apellido}"  required="true" readonly="true">
+                                            <f:validateLength maximum="45" />
+                                            <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú ]/i" />
+                                        </p:inputText>
+                                        
+                                        <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{docenteFormBean.actualizarDocente()}" update="mensajes frmListaDocentes"
+                                                         icon="ui-icon-disk" style="margin: 20px"/>
+                                        <p:commandButton value="#{msg['usuario.cancelar']}" update="frmListaDocentes"
+                                                         oncomplete="PF('dialogEditarDocente').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                                    </h:panelGrid>
+
+                                </p:dialog>
+                            </h:form>
+                            <h:form id="frmEliminar">
+                                <p:dialog  header="#{msg['abm.eliminar']}" widgetVar="dialogEliminarDocente" resizable="false" 
+                                           showEffect="explode" hideEffect="explode" modal="true" >
+                                    <h:panelGrid id="pnlEditar" columns="1" cellpadding="5">
+                                        <p:outputLabel value="#{msg['menu.legajo']}: #{docenteFormBean.docenteBean.docente.legajo}" />
+                                        <p:outputLabel value="#{msg['menu.cargo']}: #{docenteFormBean.docenteBean.docente.cargo}"/>
+                                        <p:outputLabel value="#{msg['menu.nombre']}: #{docenteFormBean.docenteBean.docente.perfil.nombre}" />
+                                        <p:outputLabel value="#{msg['menu.apellido']}: #{docenteFormBean.docenteBean.docente.perfil.apellido}"/>       
+
+                                    </h:panelGrid>
+                                    <p:commandButton value="#{msg['abm.confirmar']}" actionListener="#{docenteFormBean.eliminarDocente()}" update="frmListaDocentes"
+                                                     icon="ui-icon-check" style="margin: 20px"/>
+                                    <p:commandButton value="#{msg['usuario.cancelar']}" update="frmListaDocentes"
+                                                     oncomplete="PF('dialogEliminarDocente').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                                </p:dialog>
+                            </h:form>
+
+                        </p:panel>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

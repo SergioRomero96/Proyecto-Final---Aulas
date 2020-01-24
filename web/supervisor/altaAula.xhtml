@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Nueva Aula (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main" >
+                    <h:form id="frmAltaAula" rendered="#{loginFormBean.verificarSesion()}">
+                        <p:panel header="#{msg['abm.cargarAula']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+
+                            <p:growl id="grwAltaAula"/>
+                            <h:panelGrid  columns="2" cellpadding="7">
+                                <p:outputLabel value="#{msg['menu.nombre']}" for="txtAula"/>
+                                <p:inputText id="txtAula" value="#{aulaFormBean.aulaBean.aula.nombre}"  required="true">
+                                    <f:validateLength maximum="45" />
+                                    <p:keyFilter regEx="/[a-zA-Zá-úÁ-Ú0-9 ]/i" />
+                                </p:inputText>
+
+                                <p:outputLabel value="#{msg['abm.descripcion']}" for="txtDescripcion"/>
+                                <p:inputTextarea  id="txtDescripcion" value="#{aulaFormBean.aulaBean.aula.descripcion}" required="true">
+                                    <f:validateLength maximum="100" />
+                                </p:inputTextarea>
+
+                                <p:outputLabel value="#{msg['abm.capacidad']}" for="txtCapacidad"/>
+                                <p:inputNumber id="txtCapacidad" value="#{aulaFormBean.aulaBean.aula.capacidad}" required="true" 
+                                               decimalPlaces="0" maxValue="500" >
+                                    <f:validateDoubleRange minimum="1" />
+                                </p:inputNumber>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="5">
+                                <p:commandButton id="btnAgregar" value="#{msg['abm.agregarAula']}" icon="ui-icon-disk" actionListener="#{aulaFormBean.registrarNuevaAula()}" update="frmAltaAula" />
+                                <p:button outcome="/supervisor/editarAula" value="#{msg['mt.verAula']}" icon="ui-icon-calculator" />
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:form>
+
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

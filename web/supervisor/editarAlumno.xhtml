@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Editar Alumnos (Supervisor) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+
+                    <p:panel  rendered="#{loginFormBean.verificarSesion()}" >
+
+                        <h2>Ver y Modificar Datos Academicos del Alumno</h2>
+                        <p:separator/>
+                        <br/>
+                        <h:form id="frmListaAlumnos" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+
+                            <p:dataTable id="tblAlumno" var="alu" value="#{alumnoFormBean.obtenerAlumnos()}" 
+                                         emptyMessage="#{msg['abm.listaAlumnos']}" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15" reflow="true">
+                                <f:facet name="header">
+                                    <p:outputLabel  value="#{msg['abm.listNomMateria']}" style="font-size: large"/>
+                                </f:facet>
+                                <p:column headerText="id">
+                                    <p:outputLabel  value="#{alu.codigo}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['menu.lu']}">
+                                    <p:outputLabel  value="#{alu.libretaUniversitaria}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.carrera']}" filterBy="#{alu.carrera.nombre}">
+                                    <p:outputLabel  value="#{alu.carrera.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['menu.apellido']}" filterBy="#{alu.perfil.apellido}">
+                                    <p:outputLabel  value="#{alu.perfil.apellido}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['menu.nombre']}" filterBy="#{alu.perfil.nombre}">
+                                    <p:outputLabel  value="#{alu.perfil.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.dni']}">
+                                    <p:outputLabel  value="#{alu.perfil.dni}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['usuario.usuario']}">
+                                    <p:outputLabel  value="#{alu.perfil.usuario.nombreUsuario}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.estadoUsuario']}" width="45">
+                                    <p:selectBooleanCheckbox  value="#{alu.perfil.usuario.estado}" disabled="true"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.editar']}" width="50" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                                    <p:commandButton id="btnEditar" icon="ui-icon-pencil" oncomplete="PF('dialogEditarAlumno').show();"
+                                                     update="frmEditar">
+                                        <f:setPropertyActionListener target="#{alumnoFormBean.alumnoBean.alumno}" value="#{alu}" />
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.desUsuario']}" width="65">
+                                    <p:commandButton id="btnEliminar" icon="ui-icon-person" oncomplete="PF('dialogEliminarAlumno').show();"
+                                                     update="frmEliminar">
+                                        <f:setPropertyActionListener target="#{alumnoFormBean.alumnoBean.alumno}" value="#{alu}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                            
+                            <p:separator />
+                                <p:commandButton id="btnPrintAlumnos" value="#{msg['alu.imprimirListado']}" icon="ui-icon-print" ajax="false"
+                                                 actionListener="#{alumnoFormBean.exportarAlumnosPdf(actionEvent)}"/>
+                        </h:form>
+
+                        <h:form id="frmEditar">
+                            <p:growl id="mensajes" />
+                            <p:dialog id="dlgEditar" header="#{msg['abm.editarAlumno']}" widgetVar="dialogEditarAlumno" resizable="false" 
+                                      showEffect="explode" hideEffect="explode" modal="true" >
+                                <h:panelGrid id="pnlEditar" columns="2" cellpadding="5">
+                                    <p:outputLabel value="#{msg['menu.lu']}" for="txtLu"/>
+                                    <p:inputText id="txtLu" value="#{alumnoFormBean.alumnoBean.alumno.libretaUniversitaria}" required="true"/>
+                                    <p:outputLabel value="#{msg['abm.carrera']}" for="cmbCarrera"/>
+                                    <p:selectOneMenu id="cmbCarrera" value="#{alumnoFormBean.alumnoBean.alumno.carrera}"
+                                                     converter="omnifaces.SelectItemsConverter">
+                                        <f:selectItems value="#{alumnoFormBean.obtenerCarreras()}" var="car" 
+                                                       itemLabel="#{car.nombre}" itemValue="#{car}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="#{msg['menu.nombre']}" for="txtNombre"/>
+                                    <p:inputText id="txtNombre" value="#{alumnoFormBean.alumnoBean.alumno.perfil.nombre}" required="true" readonly="true"/>
+                                    <p:outputLabel value="#{msg['menu.apellido']}" for="txtApellido"/>
+                                    <p:inputText id="txtApellido" value="#{alumnoFormBean.alumnoBean.alumno.perfil.apellido}" required="true" readonly="true"/> 
+                                    <p:outputLabel value="#{msg['abm.dni']}" for="txtDni"/>
+                                    <p:inputText id="txtDni" value="#{alumnoFormBean.alumnoBean.alumno.perfil.dni}" required="true"/>
+                                    
+
+                                </h:panelGrid>
+                                <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{alumnoFormBean.actualizarDatosAlumno()}" update="mensajes frmListaAlumnos"
+                                                 icon="ui-icon-disk" style="margin: 20px" oncomplete="PF('dialogEditarAlumno').hide();"/>
+                            </p:dialog>
+                        </h:form>
+                        
+                        <h:form id="frmEliminar">
+                            <p:growl id="mensajes" />
+                            <p:dialog  header="#{msg['abm.desUsuario']}" widgetVar="dialogEliminarAlumno" resizable="false" 
+                                       showEffect="explode" hideEffect="explode" modal="true" >
+                                <h:panelGrid id="pnlEliminar" columns="1" cellpadding="5">
+                                    <p:outputLabel value="#{msg['menu.lu']}: #{alumnoFormBean.alumnoBean.alumno.libretaUniversitaria}" />
+                                    <p:outputLabel value="#{msg['abm.carrera']}: #{alumnoFormBean.alumnoBean.alumno.carrera.nombre}"/>
+                                    <p:outputLabel value="#{msg['menu.nombre']}: #{alumnoFormBean.alumnoBean.alumno.perfil.nombre}" />
+                                    <p:outputLabel value="#{msg['menu.apellido']}: #{alumnoFormBean.alumnoBean.alumno.perfil.apellido}"/>  
+                                    <p:outputLabel value="#{msg['usuario.usuario']}: #{alumnoFormBean.alumnoBean.alumno.perfil.usuario.nombreUsuario}"/>
+
+                                </h:panelGrid>
+                                <p:commandButton value="#{msg['abm.actualizar']}" actionListener="#{alumnoFormBean.eliminarCuentaUsuario()}" update="mensajes frmListaAlumnos"
+                                                 icon="ui-icon-check" style="margin: 20px"/>
+                                <p:commandButton value="Cancelar" update="frmListaAlumnos"
+                                                 oncomplete="PF('dialogEliminarAlumno').hide();" icon="ui-icon-close" style="margin: 20px"/>
+                            </p:dialog>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

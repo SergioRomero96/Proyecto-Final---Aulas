@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <p:panel id="pnlHorario" rendered="#{loginFormBean.verificarSesion()}">
+                        <h2> Horarios de materias inscripto </h2>
+                        <p:separator />
+                        <br />
+
+                        <h:form id="frmHorarioMateria" >
+                            <p:growl id="mensaje" />
+
+                            <p:dataTable id="tblHorarioMaterias" emptyMessage="#{msg['alu.listaHorarioMateria']}"
+                                         value="#{horarioMateriaFormBean.obtenerHorarioMaterias()}" var="hm" rows="10" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+                                         rowsPerPageTemplate="5, 10, 15">
+                                <p:column headerText="#{msg['abm.year']}" width="40">
+                                    <p:outputLabel value="#{hm.docenteMateria.anio}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}" filterBy="#{hm.docenteMateria.materia.nombre}">
+                                    <p:outputLabel  value="#{hm.docenteMateria.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.dia']}" width="80">
+                                    <p:outputLabel value="#{hm.dia}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['alu.horario']}" width="120">
+                                    <p:outputLabel value="#{hm.horarioDesde} #{msg['abm.a']} #{hm.horarioHasta} hs"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.aula']}" width="120">
+                                    <p:outputLabel value="#{hm.aula.nombre}" />
+                                </p:column>
+                                <p:column headerText="#{msg['alu.agregarHorario']}" width="80">
+                                    <p:commandButton icon="ui-icon-plus" actionListener="#{horarioMateriaFormBean.agregarHorarioParaImprimir(hm)}"
+                                                     update="frmHorarioMateria">
+                                        <p:confirm header="#{msg['abm.confirmar']}" message="#{msg['alu.mensajeConf']}" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="#{msg['alu.eliminarHorario']}" width="80">
+                                    <p:commandButton icon="ui-icon-minus" actionListener="#{horarioMateriaFormBean.eliminarHorarioParaImprimir(hm)}"
+                                                     update="frmHorarioMateria">
+                                        <p:confirm header="#{msg['abm.confirmar']}" message="#{msg['alu.mensajeEli']}" icon="ui-icon-alert" />
+                                    </p:commandButton>
+                                </p:column>
+
+
+                            </p:dataTable>
+
+
+
+                            <br/>
+                            <h2> #{msg['alu.horarioImprimir']} </h2>
+                            <p:separator />
+                            <br />
+                            
+                            <p:dataTable id="tblHorarioMateriasElegido" emptyMessage="No eligio ningun horario"
+                                         value="#{horarioMateriaFormBean.horariosAImprimir}" var="hmi" >
+                                <f:facet name="header">
+                                    <p:outputLabel  value="#{msg['alu.cursada']}" style="font-size: large"/>
+                                </f:facet>
+                                <p:column headerText="#{msg['abm.year']}" width="40">
+                                    <p:outputLabel value="#{hmi.docenteMateria.anio}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.materia']}" >
+                                    <p:outputLabel  value="#{hmi.docenteMateria.materia.nombre}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.dia']}" width="80">
+                                    <p:outputLabel value="#{hmi.dia}"/>
+                                </p:column>
+                                <p:column headerText="#{msg['alu.horario']}" width="120">
+                                    <p:outputLabel value="#{hmi.horarioDesde} a #{hmi.horarioHasta} hs"/>
+                                </p:column>
+                                <p:column headerText="#{msg['abm.aula']}" width="120">
+                                    <p:outputLabel value="#{hmi.aula.nombre}" />
+                                </p:column>
+
+                            </p:dataTable>
+                            <br />
+                            
+                            <p:separator />
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="#{msg['alu.mjeImprimir']}"/>
+                                <p:commandButton id="btnPrintHorarioCursada" value="#{msg['alu.imprimir']} #{msg['alu.horario']}" icon="ui-icon-print" ajax="false"
+                                                 actionListener="#{horarioMateriaFormBean.exportarHorarioCursadaPdf(actionEvent)}" disabled="#{horarioMateriaFormBean.boton}"/>
+                            </p:panelGrid>
+                                
+                            
+
+                        </h:form>
+
+                        <h:form id="frmConfirmacion">
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="#{msg['alu.si']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="#{msg['alu.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+                        </h:form>
+                    </p:panel>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

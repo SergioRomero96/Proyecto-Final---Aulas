@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <h:outputScript name="./js/calendar_es.js"/>
+        <title>#{msg['mt.title']}</title>
+    </h:head>
+
+    <h:body>
+        <div id="contenedor">
+            <div id="top">
+                <ui:insert name="top">
+                    <div id="tooplate_header"></div>
+                    <div id="tooplate_middle">
+                        <h:form rendered="#{loginFormBean.verificarSesion()}">  
+                            <p:growl id="messages"/>
+                            <p:menubar>
+                                <p:menuitem value="#{msg['mt.inicio']}" outcome="/menu" icon="ui-icon-home" />
+                                <p:submenu label="#{msg['mt.carreras']}" icon="ui-icon-folder-open" 
+                                           rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                                    <p:menuitem value="#{msg['mt.verCarrera']}" outcome="/supervisor/editarCarrera" />
+                                    <p:menuitem value="#{msg['mt.cgCarrera']}" outcome="/supervisor/altaCarrera" 
+                                                rendered="#{loginFormBean.verificarTipoUsuario() eq 2}" />
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.alumnos']}" icon="ui-icon-person"
+                                           rendered="#{loginFormBean.verificarTipoUsuario() eq 1 ||
+                                                       loginFormBean.verificarTipoUsuario() eq 2}">
+                                    <p:menuitem value="#{msg['mt.verAlumno']}" outcome="/supervisor/editarAlumno" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"/>
+                                    <p:menuitem value="#{msg['mt.inscripcion']}" outcome="/supervisor/verInscripcionMateria" 
+                                                />
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.docentes']}" icon="ui-icon-person"
+                                           rendered="#{loginFormBean.verificarTipoUsuario() eq 2}">
+                                    <p:menuitem value="#{msg['mt.verDocente']}" outcome="/supervisor/editarDocente"/>
+                                    <p:menuitem value="#{msg['mt.cgDocente']}" outcome="/supervisor/altaDocente" />
+                                    <p:menuitem value="#{msg['mt.agMatDoc']}" outcome="/supervisor/asignarDocenteMateria" 
+                                                rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"/>
+                                    <p:menuitem value="#{msg['mt.verMatDoc']}" outcome="/supervisor/editarDocenteMateria" 
+                                                rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"/>
+                                </p:submenu>
+
+                                <p:submenu label="#{msg['mt.aulas']}" icon="ui-icon-clipboard"
+                                           rendered="#{loginFormBean.verificarTipoUsuario() eq 2 }">
+                                    <p:menuitem value="#{msg['mt.verAula']}" outcome="/supervisor/editarAula"
+                                                rendered="#{loginFormBean.verificarTipoUsuario() eq 2}" />
+                                    <p:menuitem value="#{msg['mt.cgAula']}" outcome="/supervisor/altaAula" 
+                                                rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"/>
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.materias']}" icon="ui-icon-clipboard" rendered="#{loginFormBean.verificarTipoUsuario() ge 2 }">
+                                    <p:menuitem value="#{msg['mt.verMateria']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"
+                                                outcome="/supervisor/editarMateria"/>
+                                    <p:menuitem value="#{msg['mt.cgMateria']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"
+                                                outcome="/supervisor/altaMateria" />
+                                    <p:menuitem value="#{msg['mt.nuevoHorario']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"
+                                                outcome="/supervisor/altaHorarioMateria" />
+                                    <p:menuitem value="#{msg['mt.verHorAsig']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 2}"
+                                                outcome="/supervisor/editarHorarioMateria" />
+                                    <p:menuitem value="#{msg['mt.insMateria']}" rendered="#{loginFormBean.verificarTipoUsuario() eq 3}"
+                                                outcome="/alumno/inscripcionMateria" />
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.horarios']}" icon="ui-icon-calendar" rendered="#{loginFormBean.verificarTipoUsuario() eq 3}">
+                                    <p:menuitem value="#{msg['mt.verHorario']}" outcome="/alumno/verHorarioMateria"/>
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.asistencias']}" icon="ui-icon-calendar" 
+                                           rendered="#{loginFormBean.verificarTipoUsuario() eq 1 ||
+                                                       loginFormBean.verificarTipoUsuario() eq 3}">
+                                    <p:menuitem value="#{msg['mt.tomarAsistencia']}"  rendered="#{loginFormBean.verificarTipoUsuario() eq 1}"
+                                                outcome="/docente/tomarAsistencia"/>
+                                    <p:menuitem value="#{msg['mt.verAsistencia']}"  rendered="#{loginFormBean.verificarTipoUsuario() eq 1}"
+                                                outcome="/docente/verAsistencia"/>
+                                </p:submenu>
+                                <p:submenu label="#{msg['mt.perfil']}" icon="ui-icon-wrench">
+                                    <p:menuitem value="#{msg['mt.actualizar']}"  outcome="/datosUsuario" rendered="#{loginFormBean.verificarTipoUsuario() eq 1 ||
+                                                         loginFormBean.verificarTipoUsuario() eq 3}"/>
+                                    <p:menuitem value="#{msg['mt.tema']}" outcome="/cambiarTema"/>
+                                </p:submenu>
+
+                                <f:facet name="options">
+                                    <p:outputLabel value="#{msg['mt.bienvenido']} #{loginFormBean.nombreUsuarioValidado} "/>
+                                    <p:commandButton value="#{msg['mt.cerrarSesion']}" icon="ui-icon-power" 
+                                                     action="#{loginFormBean.cerrarSesion()}"/>
+                                </f:facet>
+                            </p:menubar>
+                        </h:form>
+                        <p:panel rendered="#{loginFormBean.verificarSesion() eq false}">
+                            <h:form>
+                                <p:outputLabel value="#{msg['mt.noSesion']} "/>
+                                <p:commandButton value="#{msg['usuario.entrar']}" action="/index?faces-redirect=true"/>
+                            </h:form>
+                        </p:panel>  
+                    </div>
+
+
+                </ui:insert>
+            </div>
+
+            <div id="content" class="center_content" >
+                <ui:insert name="content">
+                    contenido
+                </ui:insert>
+            </div>
+
+            <div id="bottom">
+                <ui:insert name="bottom">
+                    Copyright © 2018 - Facultad de Ingeniería - UNJu&emsp;&emsp;&emsp;&emsp;|&emsp;&emsp;&emsp;&emsp;Analista Programador Universitario
+                </ui:insert>
+            </div>
+        </div>
+    </h:body>
+
+</html>

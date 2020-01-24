@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="docenteMateriaReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="126571b0-717b-48df-ab41-0ac5cf37cfa3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<style name="Row" mode="Transparent">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#E6DAC3"/>
+		</conditionalStyle>
+	</style>
+	<field name="codigo" class="java.lang.Integer"/>
+	<field name="anio" class="java.lang.Integer"/>
+	<field name="materia.nombre" class="java.lang.String"/>
+	<field name="docente.legajo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="71" y="33" width="402" height="45" uuid="faa4378d-f6b6-448e-8630-cf0fe846a25c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="20" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Materias asignadas a Docentes - Reporte]]></text>
+			</staticText>
+			<rectangle radius="10">
+				<reportElement mode="Transparent" x="60" y="19" width="423" height="72" uuid="4f5a3f58-53ff-426a-9520-9a47ab1fbb9e"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="ee7c6f84-5ae3-43f6-9ed5-bed9abb6aba4"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="SubTitle" x="1" y="15" width="551" height="24" uuid="b8a98b3d-c4b2-4870-85a4-f273e71bc8d8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="14" isBold="true" isUnderline="true" pdfFontName="Times-Roman"/>
+				</textElement>
+				<text><![CDATA[Listado de Materias asignadas a Docentes - Facultad de Ingeniería UNJu]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="39" width="40" height="20" uuid="713504c0-5d62-4e50-ba98-f1e374c71538"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="39" width="40" height="20" uuid="f73cffb2-8faf-4ca0-8c43-ea895cbdb6a4"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Año]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="41" width="315" height="20" uuid="0c6f4042-197c-4b69-866b-ee4767441ca5"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Materia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="39" width="100" height="20" uuid="ad551700-128c-4539-b055-2a63fa47cbde"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Legajo del Docente]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="38" width="555" height="1" uuid="4af1931d-f346-4b76-9f83-47d5f12d17f6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="58" width="555" height="1" uuid="8ce8f257-e4e7-4962-ae25-7e469e3bc8e6"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="39" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="28" uuid="9e1f6fc5-7872-4b3c-a2f1-4de7bc61bfd6"/>
+				<textField>
+					<reportElement x="0" y="8" width="40" height="20" uuid="95eeb4d1-438c-4560-bd53-21600d88503c"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="50" y="8" width="40" height="20" uuid="d5edf177-33ee-4f05-8d56-2b3034dcdf4b"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{anio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="117" y="8" width="315" height="20" uuid="f5e288e1-ff35-4ff5-8e09-ba6e2dcf6b14"/>
+					<textFieldExpression><![CDATA[$F{materia.nombre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="452" y="8" width="100" height="20" uuid="321d749a-edb3-4d2c-a229-f8bb020e3c40"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{docente.legajo}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="22" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="e6d5d712-6b90-4931-a079-24f9c7983386"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-21" y="1" width="597" height="24" forecolor="#D0B48E" backcolor="#F2EBDF" uuid="493b1815-6aaf-4bb1-8ea6-496205985c94"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="533" y="0" width="40" height="20" forecolor="#736343" uuid="48c482f4-c13d-4444-b109-78d74a669671"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="453" y="0" width="80" height="20" forecolor="#736343" uuid="e415ad69-8089-4c6e-a309-bed6af0ac016"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="22" y="1" width="197" height="20" forecolor="#736343" uuid="35554e47-e62d-4ff3-a242-af774b5becc6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

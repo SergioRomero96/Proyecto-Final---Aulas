@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <!-- Vista Modificar Datos (Docente) -->
+        <ui:composition template="./../templates/masterTemplate.xhtml">
+
+            <ui:define name="content">
+                <div id="tooplate_main">
+                    <div class="contenedorUsuario">
+                        <h:form id="frmEditarProfesor" rendered="#{loginFormBean.verificarSesion()}">
+                            <p:growl id="mensajeGeneral" />
+                            <p:panel header="Modificar Datos Docente" footer="APU 2018- FACULTAD DE INGENIERIA UNJu"
+                                     rendered="#{loginFormBean.verificarTipoUsuario() eq 1}">
+                                <h:panelGrid columns="4" cellpadding="5">
+                                    
+                                    <p:outputLabel value="Nombre: " for="txtNombre" />
+                                    <p:inputText id="txtNombre" value="" />
+                                    
+                                    <p:outputLabel value="Apellido " for="txtApellido" />
+                                    <p:inputText id="txtApellido" value="" />
+                                    
+                                    <p:outputLabel value="DNI: " for="txtDni" />
+                                    <p:inputText id="txtDni" value="" />
+                                    
+                                    <p:outputLabel value="Fecha Nacimiento " for="txtFechaNacimiento"/>
+                                    <p:calendar id="txtFechaNacimiento" pattern="dd-MM-yyyy" mask="true" size="10" maxlength="10"
+                                                value="" />
+                                    <p:outputLabel value="Correo Electronico: " for="txtCorreoElectronico"/>
+                                    
+                                    <p:inputText id="txtCorreoElectronico" value="" >
+                                        <f:validator validatorId="emailValidator"/>
+                                    </p:inputText>
+                                    
+                                    <p:outputLabel value="Celular: " for="txtCelular"/>
+                                    <p:inputText id="txtCelular" value=""/>
+                                    
+                                    <p:outputLabel value="Usuario: " for="txtUsuario" />
+                                    <p:inputText id="txtUsuario" disabled="true" value="" />
+                                    
+                                    <p:outputLabel value="Password: " for="txtPassword" />
+                                    <p:inputText id="txtPassword" value="" />
+                                    
+                                    <p:outputLabel value="Legajo: " for="txtLegajo" />
+                                    <p:inputText id="txtLegajo" disabled="true" value="" />
+                                    
+                                    <p:outputLabel value="Cargo: " for="txtCargo" />
+                                    <p:inputText id="txtCargo" disabled="true" value="" />
+                                    
+                                    <p:commandButton id="btnModificar" value="Guardar Cambios" 
+                                         update="mensajeGeneral" />
+                                </h:panelGrid>
+                            </p:panel>   
+                        </h:form>
+                    </div>
+                </div>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
