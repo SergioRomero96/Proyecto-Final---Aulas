@@ -1,5 +1,5 @@
 # Proyecto-Final---Aulas
-Proyecto web Implementado con JSF-Primefaces y Hibernate. Para la materia Programación visual - UNJu
+Proyecto web Implementado con JSF-Primefaces y Hibernate. Para la materia Programación visual - UNJu, Año 2018
 
 ## Capturas de pantallas de algunas interfaces del sistema
 
